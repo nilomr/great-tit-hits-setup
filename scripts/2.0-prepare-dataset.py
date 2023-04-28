@@ -76,6 +76,7 @@ def main(
         min_silence_length=0.001,  # Minimum silence length allowed
         gauss_sigma=3,  # Sigma for gaussian kernel
         # general settings
+        dereverb=True,
         song_level=True,
         subset=None,
         verbose=False,
