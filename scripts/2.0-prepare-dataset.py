@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from typing import Any, Optional
 
-import git
+import pyrootutils
 import ray
 import typer
 from pykanto.dataset import KantoData
@@ -50,9 +50,7 @@ def main(
 
     # Create a ProjDirs object for the project, including location of raw data to
     # use
-    project_root = Path(
-        git.Repo(".", search_parent_directories=True).working_tree_dir
-    )
+    project_root = pyrootutils.find_root()
     segmented_dir = project_root / "data" / "segmented" / data_folder
     DIRS = ProjDirs(project_root, segmented_dir, dataset_id, mkdir=True)
 
