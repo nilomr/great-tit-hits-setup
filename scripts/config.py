@@ -33,12 +33,18 @@ DIRS = ProjDirs(PROJECT_ROOT, RAW_DATA, DATASET_ID, mkdir=True)
 # ──── INPUT AND OUTPUT FILE PATHS ──────────────────────────────────────────────
 
 
-bird_data = DIRS.RESOURCES / "birds"
-DIRS.append("BIRD_DATA", bird_data)
-DIRS.append("MORPHOMETRICS", bird_data / "morphometrics.csv")
-DIRS.append("BROODS", bird_data / "broods.csv")
-DIRS.append("MAIN", bird_data / "main.csv")
-DIRS.append("NESTBOXES", bird_data / "nestboxes.csv")
+def append_project_files(DIRS: ProjDirs) -> ProjDirs:
+    bird_data = DIRS.RESOURCES / "birds"
+    DIRS.append("BIRD_DATA", bird_data)
+    DIRS.append("MORPHOMETRICS", bird_data / "morphometrics.csv")
+    DIRS.append("BROODS", bird_data / "broods.csv")
+    DIRS.append("MAIN", bird_data / "main.csv")
+    DIRS.append("NESTBOXES", bird_data / "nestboxes.csv")
+    DIRS.append("PERIMETER", DIRS.RESOURCES / "wytham_map" / "perimeter.shp")
+    return DIRS
+
+
+DIRS = append_project_files(DIRS)
 
 
 # ──── TEST ─────────────────────────────────────────────────────────────────────
@@ -53,7 +59,8 @@ def build_projdir(
 
     Args:
         dataset_id (str): The name of the dataset to use or create.
-        data_dir (Path): The location of the data. This could be an external drive, etc
+        data_dir (Path): The location of the data. This could be an external
+            drive, etc
 
     Returns:
         ProjDirs: A ProjDirs object for the project, including the location
@@ -74,11 +81,6 @@ def build_projdir(
     dirs = ProjDirs(PROJECT_ROOT, RAW_DATA, dataset_id, mkdir=True)
 
     # Set up additional input and output file paths
-    bird_data = dirs.RESOURCES / "birds"
-    dirs.append("BIRD_DATA", bird_data)
-    dirs.append("MORPHOMETRICS", bird_data / "morphometrics.csv")
-    dirs.append("BROODS", bird_data / "broods.csv")
-    dirs.append("MAIN", bird_data / "main.csv")
-    dirs.append("NESTBOXES", bird_data / "nestboxes.csv")
+    dirs = append_project_files(dirs)
 
     return dirs
