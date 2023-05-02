@@ -78,6 +78,7 @@ def main(
         song_level=True,
         subset=None,
         verbose=False,
+        num_cpus=80,
     )
 
     # ──── BUILD AND SAVE DATASET ───────────────────────────────────────────────────
@@ -87,9 +88,9 @@ def main(
     dataset = KantoData(
         DIRS,
         parameters=params,
-        overwrite_dataset=True,
+        overwrite_dataset=False,
         random_subset=None,
-        overwrite_data=True,
+        overwrite_data=False,
     )
 
     out_dir = DIRS.DATA / "datasets" / dataset_id / f"{dataset_id}.db"
