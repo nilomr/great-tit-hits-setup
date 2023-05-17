@@ -41,6 +41,7 @@ def append_project_files(DIRS: ProjDirs) -> ProjDirs:
     DIRS.append("MAIN", bird_data / "main.csv")
     DIRS.append("NESTBOXES", bird_data / "nestboxes.csv")
     DIRS.append("PERIMETER", DIRS.RESOURCES / "wytham_map" / "perimeter.shp")
+    DIRS.append("ML", DIRS.DATASET.parent / "ML")
     return DIRS
 
 
