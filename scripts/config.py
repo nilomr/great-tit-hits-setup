@@ -23,7 +23,8 @@ DATA_LOCATION = Path("/media/nilomr/SONGDATA/wytham-great-tit")
 # DATA_LOCATION = Path("/data/zool-songbird/shil5293/data/wytham-great-tit")
 
 # Create symlink from project to data if it doesn't exist already:
-link_project_data(DATA_LOCATION, PROJECT_ROOT / "data")
+if not (PROJECT_ROOT / "data").exists():
+    link_project_data(DATA_LOCATION, PROJECT_ROOT / "data")
 
 # Create a ProjDirs object for the project, including location of raw data to
 # segment or the already-segmented data
