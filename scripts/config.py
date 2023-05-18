@@ -29,6 +29,7 @@ if not (PROJECT_ROOT / "data").exists():
 # Create a ProjDirs object for the project, including location of raw data to
 # segment or the already-segmented data
 RAW_DATA = PROJECT_ROOT / "data" / "raw" / DATASET_ID  # .lower()
+RAW_DATA.mkdir(exist_ok=True)
 DIRS = ProjDirs(PROJECT_ROOT, RAW_DATA, DATASET_ID, mkdir=True)
 
 # ──── INPUT AND OUTPUT FILE PATHS ──────────────────────────────────────────────
