@@ -11,15 +11,14 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import ray
 import seaborn as sns
-from astral import LocationInfo
-from astral.sun import sun
 from config import build_projdir
 from matplotlib import dates as mdates
 from matplotlib.patches import Patch
 from matplotlib.ticker import FuncFormatter
 from pykanto.utils.custom import parse_sonic_visualiser_xml
 from pykanto.utils.paths import get_file_paths
-from pytz import timezone
+
+from greti.wrangle import add_sunrise_columns
 
 # ──── FUNCTION DEFINITIONS ─────────────────────────────────────────────────────
 
@@ -136,49 +135,6 @@ def create_dataframe(ids: list, years: list, times: list) -> pd.DataFrame:
     A pandas DataFrame with columns for ids, years, and times.
     """
     df = pd.DataFrame({"pnum": ids, "year": years, "timedate": times})
-    return df
-
-
-def add_sunrise_columns(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Adds columns for sunrise time, sunrise time in minutes, and difference from sunrise time.
-
-    Args:
-    df: A pandas DataFrame with columns for ids, years, and times.
-
-    Returns:
-    The original DataFrame with added columns for sunrise time, sunrise time in minutes, and difference from sunrise time.
-    """
-    # create date column from timedate column:
-    df.loc[:, "date"] = df["timedate"].apply(lambda x: x.date())
-
-    # create times_min column from timedate column:
-    df.loc[:, "time_min"] = df["timedate"].apply(
-        lambda x: x.hour * 60 + x.minute
-    )
-
-    # create a timezone object for the location of the recordings:
-    tz = timezone("UTC")
-    wytham_latlong = (51.769602, -1.327018)
-    # create a location object for the location of the recordings:
-    wytham = LocationInfo(
-        "Wytham", "England", "UTC", wytham_latlong[0], wytham_latlong[1]
-    )
-
-    # create a list of sunrise times for each date in the dataframe:
-    sunrise_times = [
-        sun(wytham.observer, date, tzinfo=tz)["sunrise"] for date in df["date"]
-    ]
-    # create a list of sunrise times in minutes:
-    sunrise_min = [t.hour * 60 + t.minute for t in sunrise_times]
-
-    # add sunrise and sunrise_min to the dataframe, without time zone:
-    df.loc[:, "sunrise"] = sunrise_times
-    df.loc[:, "sunrise_min"] = sunrise_min
-
-    # calculate the time since sunrise in minutes:
-    df.loc[:, "diff_time"] = df["time_min"] - df["sunrise_min"]
-
     return df
 
 

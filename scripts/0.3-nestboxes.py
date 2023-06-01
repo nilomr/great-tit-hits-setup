@@ -4,15 +4,14 @@
 # ──── IMPORTS ──────────────────────────────────────────────────────────────────
 
 from __future__ import annotations
-from pathlib import Path
 
-from typing import Tuple
-
-import geopandas as gpd
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 from config import DIRS
+
+from greti.io import prepare_shape_data
+from greti.plot import plot_nestboxes_and_perimeter
 
 # ──── FUNCTION DEFINITIONS ─────────────────────────────────────────────────────
 
@@ -96,73 +95,6 @@ def plot_variables(nestbox_data, variables):
             fig.delaxes(axs[i // num_cols, i % num_cols])
 
     plt.tight_layout()
-    plt.show()
-
-
-def prepare_shape_data(
-    perimeter_path: Path, nestboxes_path: Path, broods_path: Path
-) -> Tuple:
-    """
-    Read data from files and return the prepared data.
-
-    Args:
-    - perimeter_path (str): The path to the shapefile of the perimeter.
-    - nestboxes_path (str): The path to the CSV file of the nestboxes.
-    - broods_path (str): The path to the CSV file of the recorded nestboxes.
-
-    Returns:
-    - Tuple containing the following data:
-        - perimeter (geopandas.GeoDataFrame): GeoDataFrame containing the perimeter data
-        - nestboxes (pandas.DataFrame): DataFrame containing the nestboxes data
-        - broods (pandas.DataFrame): DataFrame containing the recorded nestboxes data
-    """
-    # read in the shapefile
-    perimeter = gpd.read_file(perimeter_path).iloc[0:1]
-
-    # import nestbox coordinates
-    nestboxes = pd.read_csv(nestboxes_path)
-
-    # import data on recorded nestboxes
-    broods = pd.read_csv(broods_path)
-
-    return perimeter, nestboxes, broods
-
-
-def plot_nestboxes_and_perimeter(
-    perimeter: gpd.GeoDataFrame,
-    nestboxes: pd.DataFrame,
-    fig_size: Tuple[int, int] = (8, 8),
-) -> None:
-    """
-    Plot the nestboxes and perimeter.
-
-    Args:
-    - perimeter (geopandas.GeoDataFrame): GeoDataFrame containing the perimeter data.
-    - nestboxes (pandas.DataFrame): DataFrame containing the nestboxes data.
-    - fig_size (Tuple[int,int]): The size of the figure to create. Default is (8,8).
-
-    Returns:
-    - None
-    """
-    sns.set_style("white")
-
-    # plot the nestboxes and perimeter
-    fig, ax = plt.subplots(figsize=fig_size)
-    perimeter.plot(ax=ax, alpha=0.5, edgecolor="k", linewidth=0, color="grey")
-    plt.scatter(
-        nestboxes.x,
-        nestboxes.y,
-        color="#242424",
-        alpha=1,
-        linewidth=0,
-        s=10,
-        label="Not Recorded",
-    )
-    ax.set_xlabel("Easting", fontsize=12, labelpad=10)
-    ax.set_ylabel("Northing", fontsize=12, labelpad=10)
-    ax.set_title("Wytham Woods Nestboxes", fontsize=14, pad=20)
-    ax.tick_params(axis="both", which="major", pad=2, labelsize=10)
-    sns.despine(ax=ax, left=True, bottom=True)
     plt.show()
 
 
