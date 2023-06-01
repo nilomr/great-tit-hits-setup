@@ -46,9 +46,21 @@ def read_nestboxes():
 
 
 def filter_species(morpho, broods, species="g"):
-    """Filter the morpho and broods dataframes to keep only the specified species."""
+    """Filter the morpho and broods dataframes to keep only the specified
+    species.
+    Creates an exception for ['20201MP57', '20201O81'], which are known to be
+    great tits but marked as a mixed brood.
+    """
     morpho = morpho.query(f"species == '{species}'")
+    print(
+        "broods with pnum ['20201MP57', '20201O81', '20221EX62'] are mixed broods, "
+        "change to 'g' based on fieldworker comments"
+    )
+    broods.loc[
+        broods["pnum"].isin(["20201MP57", "20201O81", "20221EX62"]), "species"
+    ] = "g"
     broods = broods.query(f"species == '{species}'")
+
     return morpho, broods
 
 
@@ -767,6 +779,7 @@ plot_delay_distribution(broods)
 todrop = [
     "section",
     "species",
+    "owner",
     "mixed_species",
     "identified_adults",
     "chick_ids",
