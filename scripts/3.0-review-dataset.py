@@ -114,40 +114,6 @@ if proceed == "y":
     dataset.data.loc[dataset.data.ID == "20221EX38", "class_label"] = np.nan
 
 
-# ──── GET SOME STATS ──────────────────────────────────────────────────────────
-
-# find ids with class labels:
-ids = dataset.data.loc[
-    dataset.data.class_label == dataset.data.class_label, "ID"
-].unique()
-
-# create a new column with a combination of ID and class_label
-dataset.data["class"] = dataset.data["ID"] + "_" + dataset.data["class_label"]
-
-# Count number of different classes per ID, removing 0
-classes_per_id = dataset.data.groupby("ID")["class_label"].nunique()
-classes_per_id = classes_per_id[classes_per_id != 0]
-
-plot_repertoire_distribution(classes_per_id)
-
-# Calculate the mean and SD and median repertoire size
-print(f"Mean repertoire size: {classes_per_id.mean():.2f}")
-print(f"SD repertoire size: {classes_per_id.std():.2f}")
-print(f"Median repertoire size: {classes_per_id.median():.2f}")
-
-# Plot the distribution of n of rows per class:
-dataset.data.groupby("class")["class"].count().hist(bins=100)
-
-# Plot the distribution of n of rows per ID:
-dataset.data.groupby("ID")["ID"].count().hist(bins=100)
-
-# Calculate the median size of each class
-dataset.data.groupby("class")["class"].count().median()
-
-# print the number of classes:
-print(f"Number of classes: {classes_per_id.sum()}")
-
-
 # ──── CLEAN DATASET ───────────────────────────────────────────────────────────
 
 # Now, remove all birds with ss < 15 and audio segments marked as noise
