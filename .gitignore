@@ -96,6 +96,7 @@ pykanto/data/datasets
 pykanto/data/segmented/*
 /logs/
 /data
+/reports/figures/spectrograms
 
 # Pytorch/neptune
 */.neptune
