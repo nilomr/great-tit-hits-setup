@@ -1,9 +1,11 @@
 # ──── DESCRIPTION ─────────────────────────────────────────────────────────────
-
-# This script is used to review the dataset and remove any noise and labelling
-# mishaps. It is run manually and carefully, and it should only run once and
-# only after the dataset has been labelled.
-
+"""
+This script performs various data wrangling and analysis tasks on the dataset.
+It cleans and reorders the columns, exports feature vectors derived from the
+metric learning model as CSV, removes bad files, updates JSONs, and extracts
+various statistics from the data. Finally, it exports the statistics to a
+markdown table.
+"""
 
 # ──── IMPORTS ─────────────────────────────────────────────────────────────────
 
@@ -33,7 +35,6 @@ dataset = load_dataset(DIRS.DATASET, DIRS)
 main_df = pd.read_csv(DIRS.MAIN)
 broods_df = pd.read_csv(DIRS.BROODS)
 birds_df = pd.read_csv(DIRS.MORPHOMETRICS)
-
 
 # ──── CLEAN/REORDER DATASET COLUMNS ───────────────────────────────────────────
 
