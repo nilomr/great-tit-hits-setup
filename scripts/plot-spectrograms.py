@@ -25,6 +25,9 @@ from pykanto.utils.compute import with_pbar
 from pykanto.utils.io import load_dataset
 from pynndescent import NNDescent
 from scipy.spatial.distance import cdist
+
+# pca embedding
+from sklearn.decomposition import PCA
 from umap import UMAP
 
 # ──── FUNCTION DEFINITIONS ───────────────────────────────────────────────────
@@ -196,15 +199,18 @@ if os.path.exists(embedding_dir):
 else:
     # calculate the embedding
     reducer = UMAP(
-        n_neighbors=100, n_components=2, min_dist=0.7, metric="euclidean"
+        n_neighbors=200, n_components=2, min_dist=0.25, metric="euclidean"
     )
     embedding = reducer.fit_transform(featv)
     # save the embedding
     np.save(embedding_dir, embedding)
 
 
-# color the points by year (four first digits of the class_id), do not use a
-# loop:
+pca = PCA(n_components=2)
+embedding = pca.fit_transform(featv)
+
+
+# color the points by year
 
 # get the years
 years = [int(i[:4]) for i in df.class_id.unique()]
@@ -353,13 +359,25 @@ med_indices = nnindex.query(med_featv.to_numpy(), k=1)
 med_indices = med_indices[0].flatten()
 mindex = df.iloc[med_indices].index
 
+# get the index for the first row of each class id
+first_indices = df.groupby("class_id").head(1).index
+
+# create dictionary with equivalent integers for each row of the dataframe:
+# this is needed to get the embedding coordinates for each row
+row_to_int = {row: i for i, row in enumerate(df.index)}
+
+# get the int equivalent for each of first_indices
+first_int = [row_to_int[i] for i in first_indices]
+
+
 # get the spectrograms for each in med_indices, centre-crop them to 128x128 and
 # plot them
 
 specs = [
     np.load(i)
     for i in with_pbar(
-        dataset.files.loc[mindex].spectrogram, desc="Loading spectrograms"
+        dataset.files.loc[first_indices].spectrogram,
+        desc="Loading spectrograms",
     )
 ]
 
@@ -374,9 +392,8 @@ for i, spec in enumerate(c_specs[:10]):
     plt.axis("off")
 plt.show()
 
-
 # with the med_indices, get the embedding coordinates for each of them
-med_coords = embedding[med_indices]
+med_coords = embedding[first_int]
 
 # create figure
 fig, ax = plt.subplots(figsize=(50, 50))
@@ -400,7 +417,7 @@ ax.set_ylim(embedding[:, 1].min(), embedding[:, 1].max())
 ax.set_aspect("equal", "datalim")
 plt.subplots_adjust(left=0, right=1, bottom=0, top=1)
 # save the figure
-plt.savefig("test.png", dpi=300)
+plt.savefig("test.png", dpi=100)
 
 
 # ──── BULD COLOR MAP BASED ON FREQUENCY ──────────────────────────────────────
