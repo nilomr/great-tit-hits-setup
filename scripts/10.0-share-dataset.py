@@ -1,7 +1,9 @@
 # ──── DESCRIPTION ─────────────────────────────────────────────────────────────
 
 """
-This script ...
+Creates necessary directories for the dataset.
+Zips and splits song data files into <5gb chunks to meet OSF requirements.
+Copies relevant files and directories to a bare repo used to share the dataset.
 """
 
 

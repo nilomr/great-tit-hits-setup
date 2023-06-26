@@ -3,6 +3,9 @@
 
 # ──── IMPORTS ──────────────────────────────────────────────────────────────────
 
+import os
+import sys
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
@@ -12,6 +15,25 @@ from config import DIRS
 
 
 def clean_morpho_data(morpho_data):
+    """
+    Cleans the morphometrics data by performing the following operations:
+    - Clean column names
+    - Remove quotes from pit tags
+    - Change empty pit tags to NaN
+    - Convert pit_tag_state column to integer allowing NA values
+    - Parse date_time and order by date_time
+    - Clean string columns
+    - Location to uppercase for consistency with other datasets
+    - Check that there are no empty strings in the dataframe
+    - Rename bto_species_code column to 'species' and only keep the first character of the string
+    - Create a new column 'year' from the date_time column
+
+    Args:
+        morpho_data (pandas.DataFrame): The morphometrics data to be cleaned.
+
+    Returns:
+        pandas.DataFrame: The cleaned morphometrics data.
+    """
     # Clean column names
     morpho_data.columns = morpho_data.columns.str.lower().str.replace(" ", "_")
 
@@ -42,7 +64,7 @@ def clean_morpho_data(morpho_data):
                 else x
             )
 
-    # Except location for consistency with other datasets
+    # uppercase location for consistency with other datasets
     morpho_data.location = morpho_data.location.str.upper()
 
     # Check that there are no empty strings in the dataframe
@@ -63,7 +85,14 @@ def clean_morpho_data(morpho_data):
 
 
 def plot_unique_birds_per_year(morpho_data):
-    # Plot the number of unique birds (based on bto_ring) per year
+    """Plots the number of unique birds (based on bto_ring) per year.
+
+    Args:
+        morpho_data (pandas.DataFrame): The morphometric data.
+
+    Returns:
+        None
+    """
     unique_birds = morpho_data.drop_duplicates(subset="bto_ring")
     sns.set_style("whitegrid")
     sns.set_context("talk")
@@ -76,8 +105,15 @@ def plot_unique_birds_per_year(morpho_data):
 
 
 def print_oldest_birds(morpho_data):
-    # for each bto_ring check the oldest date_time and calculate the different between
-    # that and its first date_time:
+    """Prints the oldest birds in the dataset based on the difference between the
+    oldest and first date_time for each bto_ring.
+
+    Args:
+        morpho_data (pandas.DataFrame): The morphometric data.
+
+    Returns:
+        None
+    """
     oldest_bird = morpho_data.groupby("bto_ring").date_time.agg(["min", "max"])
     oldest_bird["age"] = oldest_bird["max"] - oldest_bird["min"]
     oldest_bird["age"] = oldest_bird["age"].dt.days / 365

@@ -1,11 +1,11 @@
 # ──── IMPORTS ──────────────────────────────────────────────────────────────────
 
+import os
+import sys
 from pathlib import Path
-from pykanto.utils.paths import (
-    ProjDirs,
-    link_project_data,
-)
+
 import pyrootutils
+from pykanto.utils.paths import ProjDirs, link_project_data
 
 # ──── PROJECT SETUP ────────────────────────────────────────────────────────────
 
@@ -14,6 +14,9 @@ DATASET_ID = "GRETI_2022"
 
 # Where are the project and its data?
 PROJECT_ROOT = pyrootutils.find_root()
+
+# Add the directory containing the config.py file to the PYTHONPATH
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Where are the project data?
 # This could be an external drive, etc

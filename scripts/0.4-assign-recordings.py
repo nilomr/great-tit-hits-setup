@@ -22,12 +22,25 @@ from pykanto.utils.compute import with_pbar
 
 
 def read_broods_data():
+    """
+    Reads the breeding data from a CSV file and returns a pandas DataFrame.
+
+    Returns:
+        A pandas DataFrame containing the breeding data.
+    """
     date_cols = ["lay_date", "clear_date", "expected_hatch_date", "hatch_date"]
     broods_data = pd.read_csv(DIRS.BROODS, parse_dates=date_cols)
     return broods_data
 
 
 def get_pnums_from_file():
+    """
+    Reads the pnums from a CSV file and returns a dictionary mapping box codes
+    to pnums.
+
+    Returns:
+        A dictionary mapping box codes to pnums.
+    """
     if "segmented" not in str(DIRS.RAW_DATA):
         return None
 
@@ -47,6 +60,18 @@ def get_pnums_from_file():
 def get_box_first_last_recordings(
     olddirs: list[Path], extension: str = ".WAV"
 ) -> Dict[str, Dict[str, datetime]]:
+    """
+    Given a list of directories containing recordings, returns a dictionary mapping
+    box codes to the datetime of their first and last recordings.
+
+    Args:
+        olddirs: A list of directories containing recordings.
+        extension: The file extension of the recordings.
+
+    Returns:
+        A dictionary mapping box codes to the datetime of their first and last
+        recordings.
+    """
     d = {}
     for box in olddirs:
         box.stem
@@ -68,6 +93,19 @@ def get_box_first_last_recordings(
 def find_pnum_for_nestboxes(
     d: Dict[str, Dict[str, datetime]], year: int
 ) -> Dict[str, str]:
+    """
+    Given a dictionary mapping box codes to the datetime of their first and last
+    recordings, and a year, returns a dictionary mapping box codes to their
+    corresponding pnums.
+
+    Args:
+        d: A dictionary mapping box codes to the datetime of their first and
+            last recordings.
+        year: The year of the breeding data to use.
+
+    Returns:
+        A dictionary mapping box codes to their corresponding pnums.
+    """
     broods_data = read_broods_data().query("year == @year").copy()
     d_pnum = {}
     missing_pnums = []
@@ -103,6 +141,17 @@ def find_pnum_for_nestboxes(
 def get_pnums_from_raw_data(
     olddirs: list[Path], extension: str = ".WAV"
 ) -> Dict[str, str]:
+    """
+    Given a list of directories containing recordings, returns a dictionary mapping
+    box codes to their corresponding pnums.
+
+    Args:
+        olddirs: A list of directories containing recordings.
+        extension: The file extension of the recordings.
+
+    Returns:
+        A dictionary mapping box codes to their corresponding pnums.
+    """
     d_box_dates = get_box_first_last_recordings(olddirs, extension)
     years = set([v["first"].year for v in d_box_dates.values()])
     if len(years) > 1:
@@ -115,6 +164,16 @@ def get_pnums_from_raw_data(
 
 
 def get_pnums(olddirs: list[Path]):
+    """
+    Given a list of directories containing recordings, returns a dictionary mapping
+    box codes to their corresponding pnums.
+
+    Args:
+        olddirs: A list of directories containing recordings.
+
+    Returns:
+        A dictionary mapping box codes to their corresponding pnums.
+    """
     pnums = get_pnums_from_file()
     if pnums is not None:
         return pnums
@@ -128,7 +187,8 @@ def rename_raw_data_folders(
     preview: bool = True,
 ) -> None:
     """
-    Rename raw data folders based on a dictionary mapping old directory names to new ones.
+    Rename raw data folders based on a dictionary mapping old directory names to
+    new ones.
 
     Args:
         raw_data_dir: The path to the root directory containing the raw data folders.

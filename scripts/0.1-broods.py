@@ -3,6 +3,7 @@
 
 # ──── IMPORTS ──────────────────────────────────────────────────────────────────
 from __future__ import annotations
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
@@ -19,6 +20,16 @@ def clean_column_names(broods_data):
 
 
 def clean_dates(broods_data):
+    """
+    Clean date columns in the broods_data DataFrame by replacing "/" with "-"
+    and converting them to datetime format.
+
+    Args:
+    broods_data (pd.DataFrame): The DataFrame containing the broods data.
+
+    Returns:
+    pd.DataFrame: The cleaned DataFrame.
+    """
     date_cols = ["lay_date", "clear_date", "expected_hatch_date", "hatch_date"]
     for col in date_cols:
         broods_data.loc[:, col] = broods_data[col].str.replace("/", "-")
@@ -29,6 +40,16 @@ def clean_dates(broods_data):
 
 
 def clean_strings(broods_data):
+    """
+    Clean string columns in the broods_data DataFrame by stripping whitespace,
+    converting to lowercase, and replacing spaces with underscores.
+
+    Args:
+    broods_data (pd.DataFrame): The DataFrame containing the broods data.
+
+    Returns:
+    pd.DataFrame: The cleaned DataFrame.
+    """
     for column in broods_data.columns:
         if column in ["pnum", "owner", "nestbox"]:
             continue
@@ -42,6 +63,17 @@ def clean_strings(broods_data):
 
 
 def filter_broods_data(broods_data, first_year: int | None):
+    """
+    Filter the broods_data DataFrame by year and species, and add a new column
+    for the nestbox.
+
+    Args:
+    broods_data (pd.DataFrame): The DataFrame containing the broods data.
+    first_year (int | None): The earliest year to include in the filtered DataFrame.
+
+    Returns:
+    pd.DataFrame: The filtered DataFrame.
+    """
     if first_year is not None:
         broods_data = broods_data[broods_data.year >= first_year]
     broods_data = broods_data[~broods_data.species.isna()]
@@ -59,6 +91,12 @@ def filter_broods_data(broods_data, first_year: int | None):
 
 
 def plot_broods_per_year(broods_data):
+    """
+    Plot the number of unique broods per year.
+
+    Args:
+    broods_data (pd.DataFrame): The DataFrame containing the broods data.
+    """
     sns.set_style("whitegrid")
     sns.set_context("talk")
     fig, ax = plt.subplots(figsize=(10, 6))
@@ -71,8 +109,10 @@ def plot_broods_per_year(broods_data):
 
 def plot_species_proportions(broods_data):
     """
-    Calculate the proportion of rows that are
-    species == b and species ==g for each year
+    Plot the proportion of rows that are species == b and species ==g for each year.
+
+    Args:
+    broods_data (pd.DataFrame): The DataFrame containing the broods data.
     """
     species_prop = (
         broods_data.groupby(["year", "species"]).size().unstack().fillna(0)
@@ -104,7 +144,12 @@ def plot_species_proportions(broods_data):
 
 
 def plot_missing_lay_dates(broods_data):
-    """Count missing lay date values per year"""
+    """
+    Plot the number of missing lay date values per year.
+
+    Args:
+    broods_data (pd.DataFrame): The DataFrame containing the broods data.
+    """
     missing = broods_data.groupby("year")["lay_date"].apply(
         lambda x: x.isna().sum()
     )
@@ -123,7 +168,12 @@ def plot_missing_lay_dates(broods_data):
 
 
 def plot_lay_date_counts(broods_data):
-    """Count birds that have lay dates each year"""
+    """
+    Plot the number of birds that have lay dates each year.
+
+    Args:
+    broods_data (pd.DataFrame): The DataFrame containing the broods data.
+    """
     lay_date_count = broods_data.groupby("year")["lay_date"].count()
     sns.set_style("whitegrid")
     fig, ax = plt.subplots(figsize=(12, 6))

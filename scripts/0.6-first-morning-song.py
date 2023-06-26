@@ -358,6 +358,13 @@ df_median = (
     .reset_index()
 )
 
+# get global median / means
+global_median = df_median["diff_time"].median()
+mean_of_means = df_median.groupby("pnum")["diff_time"].mean().mean()
+print(f"Global median time to sunrise: {global_median:.2f}")
+print(f"Gloabl mean of mean time to sunrise: {mean_of_means:.2f}")
+
+
 # Plot distribution of time of day for all ids, aggregated by year:
 ax = plot_kde(df, "time_min", "year")
 # zoom in between 2 am and 8am:

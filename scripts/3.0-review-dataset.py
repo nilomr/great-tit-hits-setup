@@ -1,9 +1,9 @@
 # ──── DESCRIPTION ──────────────────────────────────────────────────────────────
-
-# This script is used to review the dataset and remove any noise and labelling
-# mishaps. It is run manually and carefully, and it should only run once and
-# only after the dataset has been labelled.
-
+"""
+This script is used to review the dataset and remove any noise and labelling
+mishaps. It is run manually and carefully, and it should only run once and
+only after the dataset has been labelled.
+"""
 
 # ──── IMPORTS ──────────────────────────────────────────────────────────────────
 

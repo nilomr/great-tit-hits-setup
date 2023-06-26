@@ -17,6 +17,16 @@ from greti.plot import plot_nestboxes_and_perimeter
 
 
 def clean_column_names(nestbox_data):
+    """
+    Cleans the column names of a pandas DataFrame by converting them to lowercase, replacing spaces and dots with underscores,
+    and removing parentheses and trailing underscores. Also renames the 'box' column to 'nestbox'.
+
+    Args:
+        nestbox_data (pandas.DataFrame): The DataFrame to clean.
+
+    Returns:
+        pandas.DataFrame: The cleaned DataFrame.
+    """
     nestbox_data.columns = nestbox_data.columns.str.lower().str.replace(
         " ", "_"
     )
@@ -29,6 +39,16 @@ def clean_column_names(nestbox_data):
 
 
 def clean_strings(nestbox_data):
+    """
+    Cleans the string columns of a pandas DataFrame by converting them to lowercase, replacing spaces with underscores,
+    and removing leading and trailing whitespaces.
+
+    Args:
+        nestbox_data (pandas.DataFrame): The DataFrame to clean.
+
+    Returns:
+        pandas.DataFrame: The cleaned DataFrame.
+    """
     for column in nestbox_data.columns:
         if column in ["nestbox", "section", "type"]:
             continue
@@ -42,6 +62,16 @@ def clean_strings(nestbox_data):
 
 
 def filter_nestbox_data(nestbox_data):
+    """
+    Filters and sorts a pandas DataFrame containing nestbox data. Converts the 'habitat_type' and 'soil_type' columns to integers,
+    checks that all string columns are non-empty, sorts the DataFrame by 'nestbox', and resets the index.
+
+    Args:
+        nestbox_data (pandas.DataFrame): The DataFrame to filter.
+
+    Returns:
+        pandas.DataFrame: The filtered DataFrame.
+    """
     int_vars = ["habitat_type", "soil_type"]
     for var in int_vars:
         nestbox_data[var] = nestbox_data[var].astype(int)
@@ -55,6 +85,19 @@ def filter_nestbox_data(nestbox_data):
 
 
 def plot_map(nestbox_data, variables, num_cols, axs):
+    """
+    Plots a scatterplot for each variable in a list of variables, with the x and y coordinates of the nestboxes as the axes,
+    and the variable as the color of the points.
+
+    Args:
+        nestbox_data (pandas.DataFrame): The DataFrame containing the nestbox data.
+        variables (list): A list of variables to plot.
+        num_cols (int): The number of columns in the plot grid.
+        axs (numpy.ndarray): A 2D array of matplotlib Axes objects.
+
+    Returns:
+        None
+    """
     for i, variable in enumerate(variables):
         row = i // num_cols
         col = i % num_cols
@@ -78,6 +121,17 @@ def plot_map(nestbox_data, variables, num_cols, axs):
 
 
 def plot_variables(nestbox_data, variables):
+    """
+    Plots a grid of scatterplots for a list of variables, with the x and y coordinates of the nestboxes as the axes,
+    and the variable as the color of the points.
+
+    Args:
+        nestbox_data (pandas.DataFrame): The DataFrame containing the nestbox data.
+        variables (list): A list of variables to plot.
+
+    Returns:
+        None
+    """
     num_plots = len(variables)
     num_cols = 6
     num_rows = (num_plots + num_cols - 1) // num_cols

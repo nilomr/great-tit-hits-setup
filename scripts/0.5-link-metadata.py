@@ -10,20 +10,16 @@ attempt in a nest box at which we tried to record songs.
 
 from __future__ import annotations
 
-import warnings
 from datetime import datetime as dt
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
-# plot the number of birds in each age category
 import seaborn as sns
 from config import DIRS
 from matplotlib.patches import Patch
-from pykanto.utils.compute import with_pbar
 
 # ──── FUNCTION DEFINITIONS ─────────────────────────────────────────────────────
 
