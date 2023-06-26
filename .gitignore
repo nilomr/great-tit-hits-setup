@@ -192,3 +192,9 @@ source/pykanto.utils.rst
 source/pykanto.utils.slurm.rst
 docs/doctrees/
 docs/jupyter_execute/
+reports/figures/first_song_sunrise_2021.png
+reports/figures/first_song_sunrise_2022.png
+reports/figures/time_from_sunrise.png
+reports/figures/time_of_day.png
+reports/figures/time_vs_date_ind_2021.png
+reports/figures/time_vs_date_ind_2022.png
