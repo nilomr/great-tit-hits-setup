@@ -66,7 +66,7 @@ To run the pipeline, follow these steps:
   pip install . # Or pip install -e '.[dev, test, doc]' if you want to develop
   ```
   See the [installation instructions for `pykanto`](https://nilomr.github.io/pykanto/_build/html/contents/installation.html) if you are going to use
-  GPUs:
+  GPUs.
   
 - Place the song data from https://osf.io/n8ac9/ in a
    `data/segmented/great-tit-hits` directory under the project root. See [how to
