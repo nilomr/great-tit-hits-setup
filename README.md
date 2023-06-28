@@ -28,6 +28,7 @@ See either [Pipeline README on
 GH](https://github.com/nilomr/great-tit-hits-setup/blob/main/docs/pipeline.md) or [website/docs]([Title](https://nilomr.github.io/great-tit-hits/site/index.html))
 
 <br>
+
 ### Installation
 
 Clone the repository and install the package locally:
