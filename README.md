@@ -18,7 +18,7 @@
 This is a repository containing code and data to recreate the **Wytham Great Tit Song Dataset** dataset
 
 [Website](https://nilomr.github.io/great-tit-hits/) •
-[Article](https://nilomr.github.io/great-tit-hits/) • [Data](https://osf.io/n8ac9/)
+[Article](https://www.biorxiv.org/content/10.1101/2023.07.03.547484v1.full.pdf) • [Data](https://osf.io/n8ac9/)
 # ㅤ
 </div>
 
